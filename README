@@ -1,0 +1,144 @@
+# TFT Player Analyst (Flask + MySQL)
+
+A database-backed web application that ingests **Teamfight Tactics (TFT) Ranked match data** from the Riot API, stores it in a **normalized MySQL schema**, and provides **player-centric analytics** useful for competitive TFT players.
+
+This project was built as a final project for **601.315 / 415 / 615 – Databases**.
+
+---
+
+## Features
+
+- Ingests **Ranked TFT matches only** (queue_id = 1100)
+- Resolves players by **Riot ID** (`gameName#tagLine`)
+- Stores match history in a **relational MySQL database**
+- Search and view **any TFT player** from the UI
+- Competitive analytics:
+  - Best augments by Top-4 rate
+  - Strongest core traits by consistency
+  - Units most associated with wins / Top-4 finishes
+- Simple Flask web interface for browsing players, matches, and analytics
+
+---
+
+## Tech Stack
+
+- Backend: Python, Flask
+- Database: MySQL
+- External API: Riot Games TFT API
+- Frontend: Server-rendered HTML (Jinja templates)
+
+---
+
+## Repository Structure
+
+```
+
+tft-player-analyst/
+app.py              # Flask routes and UI
+ingest.py           # Riot API ingestion pipeline
+riot_api.py         # Riot API wrapper
+db.py               # MySQL connection helper
+schema.sql          # Full relational DDL
+templates/          # HTML templates
+requirements.txt
+.env.example
+
+````
+
+---
+
+## Setup
+
+### 1 Create virtual environment and install dependencies
+
+```bash
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+````
+
+### 2 Create database + tables
+
+```bash
+mysql -u root -p < schema.sql
+```
+
+### 3 Configure environment variables
+
+Copy `.env.example` to `.env` and fill in values:
+
+```env
+MYSQL_HOST=localhost
+MYSQL_PORT=3306
+MYSQL_DATABASE=tftdb
+MYSQL_USER=tft
+MYSQL_PASSWORD=yourpassword
+
+RIOT_API_KEY=RGAPI-xxxxxxxx
+
+# Korea example:
+RIOT_PLATFORM_HOST=kr.api.riotgames.com
+RIOT_REGIONAL_HOST=asia.api.riotgames.com
+```
+
+---
+
+## Run
+
+```bash
+python app.py
+```
+
+Open:
+
+* Home: `http://127.0.0.1:5000`
+* Player: `http://127.0.0.1:5000/player/jinong/jm7`
+* Analytics: `http://127.0.0.1:5000/analytics`
+
+---
+
+## Usage
+
+1. Use the search bar to enter a Riot ID (`gameName#tagLine`)
+2. On the player page, click **Refresh** to ingest recent Ranked matches
+3. Browse match history and open individual match pages
+4. Visit **Analytics** for aggregate insights
+
+---
+
+## Database Design
+
+Normalized tables (see `schema.sql`):
+
+* `players`
+* `matches`
+* `participants`
+* `participant_traits`
+* `participant_units`
+* `participant_augments`
+
+Includes primary keys, foreign keys, and indexes to support analytics queries efficiently.
+
+---
+
+## Notes
+
+* Keep your Riot API key private. Do not commit `.env`.
+* Riot API has rate limits; ingestion includes basic backoff handling.
+* This project is for educational/analytical use and is not affiliated with Riot Games.
+
+---
+
+## Possible Extensions
+
+* Patch-aware analytics (group by patch)
+* Item-level analytics (best items per carry/unit)
+* Rank progression tracking over time
+* More UI filters (date range, queue type, placement buckets)
+
+---
+
+## Attribution
+
+Uses Riot Games APIs under Riot’s developer policies.
+This project is not endorsed by or affiliated with Riot Games.
