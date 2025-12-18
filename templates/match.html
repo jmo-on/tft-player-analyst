@@ -1,0 +1,14 @@
+<!doctype html>
+<html>
+  <body>
+    <h2>Match: {{match.match_id}}</h2>
+    <p>game_datetime: {{match.game_datetime}} | length: {{match.game_length}}</p>
+
+    <h3>Placements</h3>
+    <ol>
+      {% for p in participants %}
+        <li>{{p.puuid}} - place {{p.placement}} - dmg {{p.total_damage_to_players}}</li>
+      {% endfor %}
+    </ol>
+  </body>
+</html>

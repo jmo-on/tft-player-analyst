@@ -1,0 +1,17 @@
+<!doctype html>
+<html>
+  <body>
+    <h2>Analytics</h2>
+    <h3>Top traits by average placement</h3>
+    <table border="1" cellpadding="6">
+      <tr><th>Trait</th><th>N</th><th>Avg Placement</th></tr>
+      {% for t in traits %}
+        <tr>
+          <td>{{t.trait_name}}</td>
+          <td>{{t.n}}</td>
+          <td>{{"%.2f"|format(t.avg_place)}}</td>
+        </tr>
+      {% endfor %}
+    </table>
+  </body>
+</html>

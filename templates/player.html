@@ -1,0 +1,27 @@
+<!doctype html>
+<html>
+  <body>
+    <h2>Player: {{game_name}}#{{tag_line}}</h2>
+
+    <form method="post" action="/refresh/{{game_name}}/{{tag_line}}">
+      <button type="submit">Refresh from Riot API</button>
+    </form>
+
+    {% if not puuid %}
+      <p>No data yet. Click refresh.</p>
+    {% else %}
+      <p>PUUID stored.</p>
+      <h3>Recent matches</h3>
+      <ul>
+        {% for m in matches %}
+          <li>
+            <a href="/match/{{m.match_id}}">{{m.match_id}}</a>
+            - placement {{m.placement}} - level {{m.level}}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+
+    <p><a href="/analytics">Analytics</a></p>
+  </body>
+</html>
